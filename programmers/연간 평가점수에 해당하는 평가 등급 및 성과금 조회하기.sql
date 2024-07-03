@@ -1,0 +1,27 @@
+WITH AVG_SCORE AS
+(
+    SELECT
+          E.EMP_NO
+        , CASE WHEN AVG(G.SCORE) >= 96 THEN 'S'
+               WHEN AVG(G.SCORE) >= 90 THEN 'A'
+               WHEN AVG(G.SCORE) >= 80 THEN 'B'
+               ELSE 'C'
+          END AS GRADE
+        , CASE WHEN AVG(G.SCORE) >= 96 THEN 0.2
+               WHEN AVG(G.SCORE) >= 90 THEN 0.15
+               WHEN AVG(G.SCORE) >= 80 THEN 0.1
+               ELSE 0
+          END AS INCEN_PERCENT
+    FROM HR_EMPLOYEES AS E
+        JOIN HR_GRADE AS G ON E.EMP_NO = G.EMP_NO
+    GROUP BY E.EMP_NO    
+)
+SELECT
+      DISTINCT E.EMP_NO
+    , E.EMP_NAME
+    , A.GRADE
+    , SUM(A.INCEN_PERCENT * SAL) OVER (PARTITION BY E.EMP_NO) AS BONUS
+FROM HR_EMPLOYEES AS E
+    JOIN AVG_SCORE AS A ON E.EMP_NO = A.EMP_NO
+ORDER BY E.EMP_NO
+;
