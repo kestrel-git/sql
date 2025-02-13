@@ -1,3 +1,7 @@
+----------------------------------------------------
+-- 특정일(2016년 11월 1일)을 기준으로 DAU, WAU, MAU 계산 --
+----------------------------------------------------
+
 -- 1. DAU
 select 
 	count(distinct user_id) as dau
@@ -6,6 +10,7 @@ from
 where 
 	to_date('2016-11-01', 'yyyy-mm-dd') - interval '1 day' <= visit_stime 
 	and visit_stime < to_date('2016-11-01', 'yyyy-mm-dd');
+
 
 
 -- 2. WAU
@@ -18,6 +23,7 @@ where
 	and visit_stime < to_date('2016-11-01', 'yyyy-mm-dd');
 
 
+
 -- 3. MAU
 select 
 	count(distinct user_id) as mau
@@ -28,7 +34,8 @@ where
 	and visit_stime < to_date('2016-11-01', 'yyyy-mm-dd')
 
 
--- 4. 한 테이블에 dau, wau, mau 표시
+	
+-- 4. 한 테이블에 DAU, WAU, MAU 표시
 
 -- 4.1. 기존 테이블 삭제
 drop table if exists active_users;  
